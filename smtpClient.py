@@ -10,42 +10,73 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
     # Create socket called clientSocket and establish a TCP connection with mailserver and port
 
     # Fill in start
+    clientSocket = socket(AF_INET, SOCK_STREAM)
+    clientSocket.connect((mailserver, port))
     # Fill in end
 
     recv = clientSocket.recv(1024).decode()
-    #print(recv) #You can use these print statement to validate return codes from the server.
-    #if recv[:3] != '220':
-    #    print('220 reply not received from server.')
+    print(recv) #You can use these print statement to validate return codes from the server.
+    if recv[:3] != '220':
+       print('220 reply not received from server.')
 
     # Send HELO command and print server response.
     heloCommand = 'HELO Alice\r\n'
     clientSocket.send(heloCommand.encode())
     recv1 = clientSocket.recv(1024).decode()
-    #print(recv1) 
-    #if recv1[:3] != '250':
-    #    print('250 reply not received from server.')
+    print(recv1) 
+    if recv1[:3] != '250':
+       print('250 reply not received from server.')
 
     # Send MAIL FROM command and handle server response.
     # Fill in start
+    mailfrom = 'MAIL FROM:<bob@example.com>\r\n'
+    clientSocket.send(mailfrom.encode())
+    recv1 = clientSocket.recv(1024).decode()
+    print(recv1) 
+    if recv1[:3] != '250':
+       print('250 reply not received from server.')
     # Fill in end
 
     # Send RCPT TO command and handle server response.
+    rcpt = 'RCPT TO:<alice@example.com>\r\n'
+    clientSocket.send(rcpt.encode())
+    recv1 = clientSocket.recv(1024).decode()
+    print(recv1) 
+    if recv1[:3] != '250':
+       print('250 reply not received from server.')
     # Fill in start
     # Fill in end
 
     # Send DATA command and handle server response.
+    data = 'DATA\r\n'
+    clientSocket.send(data.encode())
+    recv1 = clientSocket.recv(1024).decode()
+    print(recv1) 
+    if recv1[:3] != '354':
+       print('354 reply not received from server.')
     # Fill in start
     # Fill in end
 
     # Send message data.
+    clientSocket.send(msg.encode())
     # Fill in start
     # Fill in end
 
     # Message ends with a single period, send message end and handle server response.
+    clientSocket.send(endmsg.encode())
+    recv1 = clientSocket.recv(1024).decode()
+    print(recv1) 
+    if recv1[:3] != '250':
+       print('250 reply not received from server.')
     # Fill in start
     # Fill in end
 
     # Send QUIT command and handle server response.
+    clientSocket.send("QUIT\r\n".encode())
+    recv1 = clientSocket.recv(1024).decode()
+    print(recv1) 
+    if recv1[:3] != '221':
+       print('221 reply not received from server.')
     # Fill in start
     # Fill in end
 
